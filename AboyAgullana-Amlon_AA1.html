@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+		<html>
+			<head>
+				<title>Simple Supplies Inventory System</title>
+				<style>
+					table {
+						border-collapse: collapse;
+						width: 100%;
+					}
+
+					th, td {
+						border: 1px solid black;
+						padding: 8px;
+						text-align: left;
+					}
+
+					body {
+						background-image: url("background-image(3).jpg");
+						background-repeat: no-repeat;
+						background-size: 100%;
+						font-family: Arial, sans-serif;
+					}
+
+					h1, h5 {
+						text-align: center;
+					}
+
+					label {
+						display: inline-block;
+						width: 120px;
+						margin-bottom: 5px;
+					}
+
+					input[type="text"],
+					input[type="number"],
+					button {
+						padding: 5px;
+						margin-bottom: 5px;
+						font-size: 14px;
+					}
+				</style>
+		</head>
+			<body>
+			<h1>Simple Supplies Inventory System</h1>
+			<h5>Aboy, Agullana, Amlon</h5>
+			<div>
+				<label for="itemName">Item Name:</label>
+				<input type="text" id="itemNameInput">
+				<label for="itemQty">Quantity:</label>
+				<input type="number" id="itemQtyInput">
+				<button onclick="addItem()">Add Item</button>
+			</div>
+			<div>
+				<label for="addQty">Add Quantity:</label>
+				<input type="number" id="addQtyInput">
+				<button onclick="addNoOfItem()">Add Quantity</button>
+			</div>
+			<div>
+				<label for="subQty">Subtract Quantity:</label>
+				<input type="number" id="subQtyInput">
+				<button onclick="subNoOfItem()">Subtract Quantity</button>
+			</div>
+			<div>
+				<label for="removeItemName">Item Name to Remove:</label>
+				<input type="text" id="removeItemNameInput">
+				<button onclick="removeItem()">Remove Item</button>
+			</div>
+			<div>
+				<button onclick="displayItems()">Display Inventory</button>
+			</div>
+			<div id="inventoryTable"></div>
+
+		<script>
+			class Inventory {
+				constructor() {}
+
+				addItem(supply, name, num) {
+					for (let item of supply) {
+						if (item.itemName === name) {
+							console.log("Item already exists in inventory.");
+							return;
+						}
+					}
+					supply.push({ itemName: name, noOfItem: num });
+				}
+
+				addNoOfItem(supply, name, num) {
+					for (let item of supply) {
+						if (item.itemName === name) {
+							item.noOfItem += num;
+							console.log("Added " + num + " " + name + "(s) to inventory.");
+							return;
+						}
+					}
+					console.log("Item not found in inventory.");
+				}
+
+				subNoOfItem(supply, name, num) {
+					for (let item of supply) {
+						if (item.itemName === name) {
+							if (item.noOfItem >= num) {
+								item.noOfItem -= num;
+								console.log("Subtracted " + num + " " + name + "(s) from inventory.");
+							} else {
+								console.log("Insufficient quantity of " + name + " in inventory.");
+							}
+							return;
+						}
+					}
+					console.log("Item not found in inventory.");
+				}
+
+				removeItem(supply, name) {
+					for (let i = 0; i < supply.length; i++) {
+						if (supply[i].itemName === name) {
+							supply.splice(i, 1);
+							console.log("Removed " + name + " from inventory.");
+							return;
+						}
+					}
+					console.log("Item not found in inventory.");
+				}
+
+				displayItems(supply) {
+					let table = "<h2>Inventory:</h2><table>";
+					table += "<tr><th>Item Name</th><th>No. of Items</th></tr>";
+					for (let item of supply) {
+						table += "<tr><td>" + item.itemName + "</td><td>" + item.noOfItem + "</td></tr>";
+					}
+					table += "</table>";
+					document.getElementById("inventoryTable").innerHTML = table;
+				}
+			}
+
+			let supply = [];
+			let inventory = new Inventory();
+
+			function addItem() {
+				let name = document.getElementById("itemNameInput").value;
+				let qty = parseInt(document.getElementById("itemQtyInput").value);
+				inventory.addItem(supply, name, qty);
+			}
+
+			function addNoOfItem() {
+				let name = document.getElementById("itemNameInput").value;
+				let qty = parseInt(document.getElementById("addQtyInput").value);
+				inventory.addNoOfItem(supply, name, qty);
+			}
+
+			function subNoOfItem() {
+				let name = document.getElementById("itemNameInput").value;
+				let qty = parseInt(document.getElementById("subQtyInput").value);
+				inventory.subNoOfItem(supply, name, qty);
+			}
+
+			function removeItem() {
+				let name = document.getElementById("removeItemNameInput").value;
+				inventory.removeItem(supply, name);
+			}
+
+			function displayItems() {
+				inventory.displayItems(supply);
+			}
+		</script>
+	</body>
+</html>
